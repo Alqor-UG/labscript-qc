@@ -307,7 +307,7 @@ def gate_dict_from_list(inst_list: list) -> dict:
 
 
 def create_memory_data(
-    shots_array: list, exp_name: str, n_shots: int
+    shots_array: list[int], exp_name: str, n_shots: int
 ) -> ExperimentDict:
     """
     The function to create memory key in results dictionary

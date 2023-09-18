@@ -5,6 +5,13 @@ import os
 from pprint import pprint
 import runmanager.remote
 
+from utils.schemes import (
+    ExperimentDict,
+    create_memory_data,
+)
+
+import csv
+
 
 remoteClient = runmanager.remote.Client()
 
@@ -43,7 +50,7 @@ def modify_shot_output_folder(new_dir: str) -> None:
     remoteClient.set_shot_output_folder(modified_shot_folder)
 
 
-def gen_script_and_globals(json_dict: dict, job_id: str) -> str:
+def gen_script_and_globals(json_dict: dict, job_id: str) -> ExperimentDict:
     """
     This is the main script that generates the labscript file.
 
@@ -54,12 +61,15 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> str:
     Returns:
         The path to the labscript file.
     """
+    exp_name = next(iter(json_dict))
+    ins_list = json_dict[next(iter(json_dict))]["instructions"]
+    n_shots = json_dict[next(iter(json_dict))]["shots"]
+
     globals_dict = {
         "job_id": "guest",
-        "shots": json_dict[next(iter(json_dict))]["shots"],
+        "shots": 4,
     }
-    pprint(json_dict)
-    globals_dict["shots"] = 4
+    globals_dict["shots"] = n_shots
     globals_dict["job_id"] = job_id
 
     # TODO: this is currently hanging
@@ -112,5 +122,22 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> str:
     )  # CAUTION !! This command only selects the file. It does not generate it!
     print("Script generated.")
 
-    remoteClient.engage()  # check that this is blocking.
+    # we know that this is blocking
+    remoteClient.engage()
+
+    # Specify the CSV file path (replace 'output.csv' with the actual file name)
+
+    csv_file_path = "/Users/fredjendrzejewski/output.csv"
+    # Open the CSV file in read mode
+    with open(csv_file_path, mode="r") as csv_file:
+        # Create a CSV reader object
+        csv_reader = csv.reader(csv_file)
+
+        # Read the number from the CSV file (assuming it's in the first row)
+        for row in csv_reader:
+            if len(row) > 0:
+                number_from_csv = int(row[0])  # Assuming the number is an integer
+        shots_array = [number_from_csv]
+    exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
+    return exp_sub_dict
     return exp_script

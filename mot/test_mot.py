@@ -184,7 +184,7 @@ def test_load_gate() -> None:
     shots_array = data["results"][0]["data"]["memory"]
     assert data["job_id"] == job_id, "job_id got messed up"
     assert len(shots_array) > 0, "shots_array got messed up"
-    assert shots_array[0] == "1 0 1", "shots_array got messed up"
+    assert shots_array[0] == "20", "shots_array got messed up"
 
 
 def test_number_experiments() -> None:
