@@ -2,6 +2,7 @@
 This is the file that creates the labscript file and sends it to the BLACS.
 """
 import os
+import numpy as np
 from pprint import pprint
 import runmanager.remote
 
@@ -69,7 +70,7 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> ExperimentDict:
         "job_id": "guest",
         "shots": 4,
     }
-    globals_dict["shots"] = n_shots
+    globals_dict["shots"] = np.arange(n_shots)
     globals_dict["job_id"] = job_id
 
     # TODO: this is currently hanging

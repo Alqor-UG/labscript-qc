@@ -284,61 +284,21 @@ def test_spooler_config() -> None:
      as we would like.
     """
     fermion_config_dict = {
-        "description": (
-            "simulator of a fermionic tweezer hardware. "
-            "The even wires denote the occupations of the spin-up fermions"
-            " and the odd wires denote the spin-down fermions"
-        ),
+        "description": ("Setup of an atomic mot."),
         "version": "0.1",
-        "cold_atom_type": "fermion",
-        "gates": [
-            {
-                "coupling_map": [
-                    [0, 1, 2, 3],
-                    [2, 3, 4, 5],
-                    [4, 5, 6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                ],
-                "description": "hopping of atoms to neighboring tweezers",
-                "name": "fhop",
-                "parameters": ["j_i"],
-                "qasm_def": "{}",
-            },
-            {
-                "coupling_map": [[0, 1, 2, 3, 4, 5, 6, 7]],
-                "description": "on-site interaction of atoms of opposite spin state",
-                "name": "fint",
-                "parameters": ["u"],
-                "qasm_def": "{}",
-            },
-            {
-                "coupling_map": [
-                    [0, 1],
-                    [2, 3],
-                    [4, 5],
-                    [6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                ],
-                "description": "Applying a local phase to tweezers through an external potential",
-                "name": "fphase",
-                "parameters": ["mu_i"],
-                "qasm_def": "{}",
-            },
-        ],
+        "cold_atom_type": "spin",
+        "gates": [],
         "max_experiments": 1000,
         "max_shots": 1000000,
         "simulator": True,
         "supported_instructions": [
-            "load",
             "barrier",
-            "fhop",
-            "fint",
-            "fphase",
             "measure",
+            "load",
         ],
-        "num_wires": 8,
+        "num_wires": 1,
         "wire_order": "interleaved",
-        "num_species": 2,
+        "num_species": 1,
     }
     spooler_config_dict = spooler.get_configuration()
     assert spooler_config_dict == fermion_config_dict
