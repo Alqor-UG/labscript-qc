@@ -125,6 +125,10 @@ class MotSpooler(Spooler):
 
                     # Here we generate the ciruit
                     result_dict["results"].append(self.gen_circuit(exp_dict, job_id))
+                    print("I started the job.")
+                    print("I am waiting ?")
+
+                    # now we should have waited long enough to extract the results.
 
                 status_msg_dict[
                     "detail"
