@@ -173,17 +173,18 @@ def test_load_gate() -> None:
                 ["measure", [0], []],
             ],
             "num_wires": 1,
-            "shots": 4,
+            "shots": 2,
             "wire_order": "interleaved",
         },
     }
 
-    job_id = "1"
+    job_id = "81"
     data = run_json_circuit(job_payload, job_id)
 
     shots_array = data["results"][0]["data"]["memory"]
+    print(shots_array)
     assert data["job_id"] == job_id, "job_id got messed up"
-    assert len(shots_array) > 0, "shots_array got messed up"
+    assert len(shots_array) == 2, "shots_array got messed up"
     assert shots_array[0] == "20", "shots_array got messed up"
 
 
@@ -196,7 +197,7 @@ def test_number_experiments() -> None:
     job_payload = {
         "experiment_0": {
             "instructions": [
-                ["load", [0], [50]],
+                ["load", [0], [30]],
                 ["measure", [0], []],
             ],
             "num_wires": 1,
@@ -314,11 +315,7 @@ def test_add_job() -> None:
         "experiment_0": {
             "instructions": [
                 ["load", [0], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["fphase", [2, 6], [np.pi]],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
                 ["measure", [0], []],
-                ["measure", [1], []],
             ],
             "num_wires": 8,
             "shots": 2,

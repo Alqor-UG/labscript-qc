@@ -5,11 +5,13 @@ import os
 import numpy as np
 from pprint import pprint
 import runmanager.remote
-
+from time import sleep
 from utils.schemes import (
     ExperimentDict,
     create_memory_data,
 )
+
+from lyse import Run
 
 import csv
 
@@ -27,6 +29,9 @@ JSON_STATUS_FOLDER = f"{REMOTE_BASE_PATH}/status"
 EXP_SCRIPT_FOLDER = "/Users/fredjendrzejewski/labscript-suite/userlib/labscriptlib/mot"
 # local files
 HEADER_PATH = f"{EXP_SCRIPT_FOLDER}/header.py"
+
+# how long should we wait for runs until we have a look again ?
+T_WAIT = 2
 
 
 def get_file_queue(dir_path: str) -> list:
@@ -118,24 +123,42 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> ExperimentDict:
     remoteClient.set_labscript_file(
         exp_script
     )  # CAUTION !! This command only selects the file. It does not generate it!
-    print("Script generated.")
 
-    # we know that this is blocking
+    # be careful. This is not a blocking command
     remoteClient.engage()
 
-    # Specify the CSV file path (replace 'output.csv' with the actual file name)
+    # now that we have engaged the calculation we need to wait for the
+    # calculation to be done
 
-    csv_file_path = "/Users/fredjendrzejewski/output.csv"
-    # Open the CSV file in read mode
-    with open(csv_file_path, mode="r") as csv_file:
-        # Create a CSV reader object
-        csv_reader = csv.reader(csv_file)
+    # we need to get the current shot output folder
+    current_shot_folder = remoteClient.get_shot_output_folder()
 
-        # Read the number from the CSV file (assuming it's in the first row)
-        for row in csv_reader:
-            if len(row) > 0:
-                number_from_csv = int(row[0])  # Assuming the number is an integer
-        shots_array = [number_from_csv]
+    # we need to get the list of files in the folder
+    hdf5_files = get_file_queue(current_shot_folder)
+
+    # we need to wait until we have the right number of files
+    while len(hdf5_files) < n_shots:
+        sleep(T_WAIT)
+        hdf5_files = get_file_queue(current_shot_folder)
+
+    shots_array = []
+    # once the files are there we can read them
+    for file in hdf5_files:
+        run = Run(current_shot_folder + "/" + file)
+        got_nat = False
+        n_tries = 0
+        # sometimes the file is not ready yet. We need to wait a bit
+        while not got_nat and n_tries < 5:
+            try:
+                print(run.get_results("/measure", "nat"))
+                # append the result to the array
+                shots_array.append(run.get_results("/measure", "nat"))
+                got_nat = True
+            except Exception as e:
+                print(e)
+                sleep(T_WAIT)
+                n_tries += 1
+    print(f"Shots array: {shots_array}")
+
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
-    return exp_script

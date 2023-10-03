@@ -110,14 +110,15 @@ class MotSpooler(Spooler):
             "header": {},
             "results": [],
         }
+
+        # what is the current job_id ?
+        print(f"Current job id: {job_id}")
         err_msg, json_is_fine = self.check_json_dict(json_dict)
         if json_is_fine:
             # check_hilbert_space_dimension
             dim_err_msg, dim_ok = self.check_dimension(json_dict)
             if dim_ok:
                 for exp in json_dict:
-                    pprint("exp")
-                    pprint(exp)
                     exp_dict = {exp: json_dict[exp]}
                     # prepare the shots folder
                     remoteClient.reset_shot_output_folder()
