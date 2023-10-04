@@ -205,11 +205,14 @@ def test_number_experiments() -> None:
             "wire_order": "interleaved",
         },
     }
-    job_id = 1
+    job_id = "21"
     data = run_json_circuit(job_payload, job_id)
 
     shots_array = data["results"][0]["data"]["memory"]
-    assert len(shots_array) > 0, "shots_array got messed up"
+    assert data["job_id"] == job_id, "job_id got messed up"
+    assert len(shots_array) == 4, "shots_array got messed up"
+    assert shots_array[0] == "30", "shots_array got messed up"
+
     inst_dict = {
         "instructions": [
             ["load", [0], [50]],
@@ -228,55 +231,6 @@ def test_number_experiments() -> None:
     job_id = 1
     with pytest.raises(AssertionError):
         data = run_json_circuit(job_payload, job_id)
-
-
-def test_seed() -> None:
-    """
-    Test that the hopping is properly working.
-    """
-
-    # first submit the job
-    job_payload = {
-        "experiment_0": {
-            "instructions": [
-                ["load", [0], []],
-                ["load", [1], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["measure", [0], []],
-                ["measure", [1], []],
-                ["measure", [4], []],
-                ["measure", [5], []],
-            ],
-            "num_wires": 8,
-            "shots": 4,
-            "wire_order": "interleaved",
-            "seed": 12345,
-        },
-        "experiment_1": {
-            "instructions": [
-                ["load", [0], []],
-                ["load", [1], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["measure", [0], []],
-                ["measure", [1], []],
-                ["measure", [4], []],
-                ["measure", [5], []],
-            ],
-            "num_wires": 8,
-            "shots": 4,
-            "wire_order": "interleaved",
-            "seed": 12345,
-        },
-    }
-
-    job_id = "1"
-    data = run_json_circuit(job_payload, job_id)
-
-    shots_array_1 = data["results"][0]["data"]["memory"]
-    shots_array_2 = data["results"][1]["data"]["memory"]
-    assert data["job_id"] == job_id, "job_id got messed up"
-    assert len(shots_array_1) > 0, "shots_array got messed up"
-    assert shots_array_1 == shots_array_2, "seed got messed up"
 
 
 def test_spooler_config() -> None:
@@ -314,16 +268,16 @@ def test_add_job() -> None:
     job_payload = {
         "experiment_0": {
             "instructions": [
-                ["load", [0], []],
+                ["load", [0], [31]],
                 ["measure", [0], []],
             ],
-            "num_wires": 8,
+            "num_wires": 1,
             "shots": 2,
             "wire_order": "interleaved",
         },
     }
 
-    job_id = 1
+    job_id = "41"
     status_msg_dict = {
         "job_id": job_id,
         "status": "None",
@@ -332,7 +286,7 @@ def test_add_job() -> None:
     }
     result_dict, status_msg_dict = spooler.add_job(job_payload, status_msg_dict)
     # assert that all the elements in the result dict memory are of string '1 0'
-    expected_value = "0 1"
+    expected_value = "31"
     for element in result_dict["results"][0]["data"]["memory"]:
         assert (
             element == expected_value

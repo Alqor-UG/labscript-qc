@@ -148,7 +148,7 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> ExperimentDict:
         got_nat = False
         n_tries = 0
         # sometimes the file is not ready yet. We need to wait a bit
-        while not got_nat and n_tries < 5:
+        while not got_nat and n_tries < 15:
             try:
                 print(run.get_results("/measure", "nat"))
                 # append the result to the array

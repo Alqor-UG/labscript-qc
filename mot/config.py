@@ -111,8 +111,6 @@ class MotSpooler(Spooler):
             "results": [],
         }
 
-        # what is the current job_id ?
-        print(f"Current job id: {job_id}")
         err_msg, json_is_fine = self.check_json_dict(json_dict)
         if json_is_fine:
             # check_hilbert_space_dimension
@@ -126,10 +124,6 @@ class MotSpooler(Spooler):
 
                     # Here we generate the ciruit
                     result_dict["results"].append(self.gen_circuit(exp_dict, job_id))
-                    print("I started the job.")
-                    print("I am waiting ?")
-
-                    # now we should have waited long enough to extract the results.
 
                 status_msg_dict[
                     "detail"
