@@ -173,17 +173,18 @@ def test_load_gate() -> None:
                 ["measure", [0], []],
             ],
             "num_wires": 1,
-            "shots": 4,
+            "shots": 2,
             "wire_order": "interleaved",
         },
     }
 
-    job_id = "1"
+    job_id = "81"
     data = run_json_circuit(job_payload, job_id)
 
     shots_array = data["results"][0]["data"]["memory"]
+    print(shots_array)
     assert data["job_id"] == job_id, "job_id got messed up"
-    assert len(shots_array) > 0, "shots_array got messed up"
+    assert len(shots_array) == 2, "shots_array got messed up"
     assert shots_array[0] == "20", "shots_array got messed up"
 
 
@@ -196,7 +197,7 @@ def test_number_experiments() -> None:
     job_payload = {
         "experiment_0": {
             "instructions": [
-                ["load", [0], [50]],
+                ["load", [0], [30]],
                 ["measure", [0], []],
             ],
             "num_wires": 1,
@@ -204,11 +205,14 @@ def test_number_experiments() -> None:
             "wire_order": "interleaved",
         },
     }
-    job_id = 1
+    job_id = "21"
     data = run_json_circuit(job_payload, job_id)
 
     shots_array = data["results"][0]["data"]["memory"]
-    assert len(shots_array) > 0, "shots_array got messed up"
+    assert data["job_id"] == job_id, "job_id got messed up"
+    assert len(shots_array) == 4, "shots_array got messed up"
+    assert shots_array[0] == "30", "shots_array got messed up"
+
     inst_dict = {
         "instructions": [
             ["load", [0], [50]],
@@ -229,116 +233,27 @@ def test_number_experiments() -> None:
         data = run_json_circuit(job_payload, job_id)
 
 
-def test_seed() -> None:
-    """
-    Test that the hopping is properly working.
-    """
-
-    # first submit the job
-    job_payload = {
-        "experiment_0": {
-            "instructions": [
-                ["load", [0], []],
-                ["load", [1], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["measure", [0], []],
-                ["measure", [1], []],
-                ["measure", [4], []],
-                ["measure", [5], []],
-            ],
-            "num_wires": 8,
-            "shots": 4,
-            "wire_order": "interleaved",
-            "seed": 12345,
-        },
-        "experiment_1": {
-            "instructions": [
-                ["load", [0], []],
-                ["load", [1], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["measure", [0], []],
-                ["measure", [1], []],
-                ["measure", [4], []],
-                ["measure", [5], []],
-            ],
-            "num_wires": 8,
-            "shots": 4,
-            "wire_order": "interleaved",
-            "seed": 12345,
-        },
-    }
-
-    job_id = "1"
-    data = run_json_circuit(job_payload, job_id)
-
-    shots_array_1 = data["results"][0]["data"]["memory"]
-    shots_array_2 = data["results"][1]["data"]["memory"]
-    assert data["job_id"] == job_id, "job_id got messed up"
-    assert len(shots_array_1) > 0, "shots_array got messed up"
-    assert shots_array_1 == shots_array_2, "seed got messed up"
-
-
 def test_spooler_config() -> None:
     """
     Test that the back-end is properly configured and we can indeed provide those parameters
      as we would like.
     """
     fermion_config_dict = {
-        "description": (
-            "simulator of a fermionic tweezer hardware. "
-            "The even wires denote the occupations of the spin-up fermions"
-            " and the odd wires denote the spin-down fermions"
-        ),
+        "description": ("Setup of an atomic mot."),
         "version": "0.1",
-        "cold_atom_type": "fermion",
-        "gates": [
-            {
-                "coupling_map": [
-                    [0, 1, 2, 3],
-                    [2, 3, 4, 5],
-                    [4, 5, 6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                ],
-                "description": "hopping of atoms to neighboring tweezers",
-                "name": "fhop",
-                "parameters": ["j_i"],
-                "qasm_def": "{}",
-            },
-            {
-                "coupling_map": [[0, 1, 2, 3, 4, 5, 6, 7]],
-                "description": "on-site interaction of atoms of opposite spin state",
-                "name": "fint",
-                "parameters": ["u"],
-                "qasm_def": "{}",
-            },
-            {
-                "coupling_map": [
-                    [0, 1],
-                    [2, 3],
-                    [4, 5],
-                    [6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                ],
-                "description": "Applying a local phase to tweezers through an external potential",
-                "name": "fphase",
-                "parameters": ["mu_i"],
-                "qasm_def": "{}",
-            },
-        ],
+        "cold_atom_type": "spin",
+        "gates": [],
         "max_experiments": 1000,
         "max_shots": 1000000,
         "simulator": True,
         "supported_instructions": [
-            "load",
             "barrier",
-            "fhop",
-            "fint",
-            "fphase",
             "measure",
+            "load",
         ],
-        "num_wires": 8,
+        "num_wires": 1,
         "wire_order": "interleaved",
-        "num_species": 2,
+        "num_species": 1,
     }
     spooler_config_dict = spooler.get_configuration()
     assert spooler_config_dict == fermion_config_dict
@@ -353,20 +268,16 @@ def test_add_job() -> None:
     job_payload = {
         "experiment_0": {
             "instructions": [
-                ["load", [0], []],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
-                ["fphase", [2, 6], [np.pi]],
-                ["fhop", [0, 4, 1, 5], [np.pi / 4]],
+                ["load", [0], [31]],
                 ["measure", [0], []],
-                ["measure", [1], []],
             ],
-            "num_wires": 8,
+            "num_wires": 1,
             "shots": 2,
             "wire_order": "interleaved",
         },
     }
 
-    job_id = 1
+    job_id = "41"
     status_msg_dict = {
         "job_id": job_id,
         "status": "None",
@@ -375,7 +286,7 @@ def test_add_job() -> None:
     }
     result_dict, status_msg_dict = spooler.add_job(job_payload, status_msg_dict)
     # assert that all the elements in the result dict memory are of string '1 0'
-    expected_value = "0 1"
+    expected_value = "31"
     for element in result_dict["results"][0]["data"]["memory"]:
         assert (
             element == expected_value

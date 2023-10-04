@@ -110,14 +110,13 @@ class MotSpooler(Spooler):
             "header": {},
             "results": [],
         }
+
         err_msg, json_is_fine = self.check_json_dict(json_dict)
         if json_is_fine:
             # check_hilbert_space_dimension
             dim_err_msg, dim_ok = self.check_dimension(json_dict)
             if dim_ok:
                 for exp in json_dict:
-                    pprint("exp")
-                    pprint(exp)
                     exp_dict = {exp: json_dict[exp]}
                     # prepare the shots folder
                     remoteClient.reset_shot_output_folder()
@@ -125,10 +124,6 @@ class MotSpooler(Spooler):
 
                     # Here we generate the ciruit
                     result_dict["results"].append(self.gen_circuit(exp_dict, job_id))
-                    print("I started the job.")
-                    print("I am waiting ?")
-
-                    # now we should have waited long enough to extract the results.
 
                 status_msg_dict[
                     "detail"
