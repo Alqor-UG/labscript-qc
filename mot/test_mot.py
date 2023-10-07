@@ -227,7 +227,7 @@ def test_number_experiments() -> None:
     job_payload = {}
     for ii in range(n_exp):
         job_payload[f"experiment_{ii}"] = inst_dict
-    job_id = 1
+    job_id = "1"
     with pytest.raises(AssertionError):
         data = run_json_circuit(job_payload, job_id)
 

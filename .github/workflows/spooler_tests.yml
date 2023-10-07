@@ -30,7 +30,7 @@ jobs:
 
   test:
 
-    runs-on: mac-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
