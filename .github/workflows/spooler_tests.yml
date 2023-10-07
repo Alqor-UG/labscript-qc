@@ -23,7 +23,7 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Run pylint
       run: |
-        pylint src
+        pylint mot
     - name: Run black
       run: |
         black --check .

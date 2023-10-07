@@ -13,7 +13,6 @@ from utils.schemes import (
     ResultDict,
 )
 
-from pprint import pprint
 from .spooler import gen_script_and_globals, modify_shot_output_folder, remoteClient
 
 N_MAX_SHOTS = 1000000

@@ -3,7 +3,6 @@ Test module for the mot file.
 """
 
 from typing import Union
-import numpy as np
 
 import pytest
 from pydantic import ValidationError

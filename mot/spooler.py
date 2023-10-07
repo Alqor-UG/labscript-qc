@@ -2,18 +2,17 @@
 This is the file that creates the labscript file and sends it to the BLACS.
 """
 import os
-import numpy as np
-from pprint import pprint
-import runmanager.remote
 from time import sleep
+
+import numpy as np
+
+import runmanager.remote
+from lyse import Run
+
 from utils.schemes import (
     ExperimentDict,
     create_memory_data,
 )
-
-from lyse import Run
-
-import csv
 
 
 remoteClient = runmanager.remote.Client()
@@ -149,13 +148,17 @@ def gen_script_and_globals(json_dict: dict, job_id: str) -> ExperimentDict:
         n_tries = 0
         # sometimes the file is not ready yet. We need to wait a bit
         while not got_nat and n_tries < 15:
+            # the exception is raised if the file is not ready yet
+            # it is broadly defined within labscript so we cannot do anything about
+            # it here.
+            # pylint: disable=W0718
             try:
                 print(run.get_results("/measure", "nat"))
                 # append the result to the array
                 shots_array.append(run.get_results("/measure", "nat"))
                 got_nat = True
-            except Exception as e:
-                print(e)
+            except Exception as exc:
+                print(exc)
                 sleep(T_WAIT)
                 n_tries += 1
     print(f"Shots array: {shots_array}")
