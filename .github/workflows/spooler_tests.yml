@@ -27,3 +27,31 @@ jobs:
     - name: Run black
       run: |
         black --check .
+
+  test:
+
+    runs-on: mac-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+    - name: Install Dependencies
+      run: |
+        conda create -n labscript-qc-x86 -y
+        conda activate labscript-qc-x86
+        conda config --env --set subdir osx-64
+        conda install python=3.10
+        conda config --env --add channels labscript-suite
+        conda install labscript-suite pyqt
+    - name: Set up labscript
+      run: |
+        labscript-profile-create
+        cp labscript_files/connection_table.h5 ~/labscript_shared/Experiments/mot/connection_table.h5
+        cp labscript_files/header.py ~/labscript-suite/userlib/labscriptlib/mot/header.py
+    - name: Start runmanager and blacs in the background
+      run: |
+        blacs &
+        runmanager &
