@@ -50,8 +50,6 @@ jobs:
         conda install python=3.10
         conda config --env --add channels labscript-suite
         conda install labscript-suite pyqt
-    - name: Set up labscript
-      run: |
         labscript-profile-create
         cp labscript_files/connection_table.h5 ~/labscript_shared/Experiments/mot/connection_table.h5
         cp labscript_files/header.py ~/labscript-suite/userlib/labscriptlib/mot/header.py
