@@ -51,7 +51,7 @@ jobs:
         conda config --env --add channels labscript-suite
         conda install labscript-suite pyqt
         conda install pip 
-        pip install requirements-dev.txt
+        pip install -r requirements-dev.txt
     - name: Set up labscript
       shell: bash -el {0}
       run: |
