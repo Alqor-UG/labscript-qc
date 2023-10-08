@@ -54,7 +54,7 @@ jobs:
         cd labscript_files
         mkdir ~/labscript-suite/userlib/labscriptlib/mot
         cp header.py ~/labscript-suite/userlib/labscriptlib/mot/header.py
-        mkdir ~/labscript_shared/Experiments/mot/
+        mkdir -p ~/labscript_shared/Experiments/mot
         cp connection_table.h5 ~/labscript_shared/Experiments/mot/connection_table.h5
         
     - name: Start runmanager and blacs in the background
