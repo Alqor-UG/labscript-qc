@@ -44,7 +44,7 @@ jobs:
         conda create -n labscript-qc-x86 -y
         conda init zsh
     - name: Install Conda Packages
-      shell: bash -l {0}
+      shell: zsh -l {0}
       run: |
         conda activate labscript-qc-x86
         conda config --env --set subdir osx-64
