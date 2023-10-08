@@ -34,17 +34,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v2
+    - uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: '3.10'
+        auto-update-conda: true
+        python-version: '3.10'    
     - name: Install Conda
+      shell: bash -el {0}
       run: |
-        conda update conda
         conda create -n labscript-qc-x86 -y
-        conda init zsh
     - name: Install Conda Packages
-      shell: zsh -l {0}
+      shell: bash -el {0}
       run: |
         conda activate labscript-qc-x86
         conda config --env --set subdir osx-64
