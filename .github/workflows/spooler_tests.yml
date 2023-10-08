@@ -41,7 +41,7 @@ jobs:
     - name: Install Dependencies
       run: |
         conda create -n labscript-qc-x86 -y
-        conda init zsh
+        eval "$(/opt/anaconda3/bin/python -I -m conda shell.zsh hook 2> /dev/null)"
         conda activate labscript-qc-x86
         conda config --env --set subdir osx-64
         conda install python=3.10
