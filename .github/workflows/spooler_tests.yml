@@ -50,7 +50,8 @@ jobs:
         conda install python=3.10
         conda config --env --add channels labscript-suite
         conda install labscript-suite pyqt
-        conda install --yes --file requirements-dev.txt
+        conda install pip 
+        pip install requirements-dev.txt
     - name: Set up labscript
       shell: bash -el {0}
       run: |
