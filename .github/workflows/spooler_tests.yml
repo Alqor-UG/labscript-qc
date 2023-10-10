@@ -66,8 +66,8 @@ jobs:
         mkdir -p ~/labscript-suite/app_saved_configs/mot/runmanager
         cp runmanager.ini ~/labscript-suite/app_saved_configs/mot/runmanager/runmanager.ini
         ini_config=$(find ~/labscript-suite/labconfig/Mac*.ini)
-        echo $ini_config
         cp default-config.ini $ini_config
+        cp zpsecret-3d71b6cc.key ~/labscript-suite/labconfig/zpsecret-3d71b6cc.key
         
     - name: Start runmanager and blacs in the background and start tests
       shell: bash -el {0}
