@@ -65,10 +65,9 @@ jobs:
         cp test_globals.h5 ~/labscript_shared/Experiments/mot/test_globals.h5
         mkdir -p ~/labscript-suite/app_saved_configs/mot/runmanager
         cp runmanager.ini ~/labscript-suite/app_saved_configs/mot/runmanager/runmanager.ini
-        hostname
-        ls -a ~/labscript-suite/labconfig
-        mkdir -p ~/labscript-suite/labconfig
-        cp default-config.ini "~/labscript-suite/labconfig/$(hostname).ini"
+        ini_config=$(find ~/labscript-suite/labconfig/Mac*.ini)
+        echo $ini_config
+        cp default-config.ini $ini_config
         
     - name: Start runmanager and blacs in the background and start tests
       shell: bash -el {0}
