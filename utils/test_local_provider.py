@@ -1,7 +1,7 @@
 """
 The tests for the storage provider using mongodb
 """
-
+import os
 import uuid
 import json
 import shutil
@@ -21,6 +21,13 @@ class TestLocalProvider:
         Remove the `storage` folder.
         """
         shutil.rmtree("storage")
+
+    @classmethod
+    def setup_class(cls) -> None:
+        """
+        Create the `storage` folder.
+        """
+        os.makedirs("storage")
 
     def test_upload_etc(self) -> None:
         """
@@ -56,6 +63,24 @@ class TestLocalProvider:
 
         # clean up our mess
         storage_provider.delete_file(second_path, job_id)
+
+    def test_different_folder_names(self) -> None:
+        """
+        Test that we can also use base paths that have a slashes at the end.
+        """
+        storage_provider = LocalProvider("storage_slash/")
+        # upload a file and get it back
+        test_content = {"experiment_0": "Nothing happened here."}
+        storage_path = "test/subcollection"
+
+        job_id = uuid.uuid4().hex[:24]
+        storage_provider.upload(test_content, storage_path, job_id)
+        test_result = storage_provider.get_file_content(storage_path, job_id)
+
+        assert test_content["experiment_0"] == test_result["experiment_0"]
+
+        # clean up our mess
+        shutil.rmtree("storage_slash")
 
     def test_upload_configs(self) -> None:
         """
@@ -104,11 +129,14 @@ class TestLocalProvider:
         # create a dummy backend
         dummy_id = uuid.uuid4().hex[:5]
         backend_name = f"dummy_{dummy_id}"
+        queue_path = "jobs/queued/" + backend_name
+
+        # test what happens for the empty case
+        next_job = storage_provider.get_file_queue(queue_path)
 
         # first we have to upload a dummy job
         job_id = (uuid.uuid4().hex)[:24]
         job_dict = {"job_id": job_id, "job_json_path": "None"}
-        queue_path = "jobs/queued/" + backend_name
         job_dict["job_json_path"] = queue_path
 
         storage_provider.upload(job_dict, queue_path, job_id=job_id)

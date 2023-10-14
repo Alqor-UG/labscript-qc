@@ -1,9 +1,10 @@
 import time
-from utils.storage_providers import MongodbProvider
 
-from mot.spooler import add_job
+# from utils.storage_providers import MongodbProvider
+from utils.storage_providers import LocalProvider
 
-storage_provider = MongodbProvider()
+# storage_provider = MongodbProvider()
+storage_provider = LocalProvider()
 
 from mot.config import spooler_object as mot_spooler
 
@@ -60,7 +61,9 @@ def main() -> None:
             "error_message": "None",
         }
 
-        result_dict, status_msg_dict = add_job(job_json_dict, status_msg_dict)
+        result_dict, status_msg_dict = backends[requested_backend].add_job(
+            job_json_dict, status_msg_dict
+        )
         storage_provider.update_in_database(
             result_dict, status_msg_dict, job_dict["job_id"], requested_backend
         )
