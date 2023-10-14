@@ -23,7 +23,56 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Run pylint
       run: |
-        pylint src
+        pylint mot
     - name: Run black
       run: |
         black --check .
+
+  test:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: '3.10'    
+    - name: Install Conda
+      shell: bash -el {0}
+      run: |
+        conda create -n labscript-qc-x86 -y
+    - name: Install Conda Packages
+      shell: bash -el {0}
+      run: |
+        conda activate labscript-qc-x86
+        conda config --env --set subdir osx-64
+        conda install python=3.10
+        conda config --env --add channels labscript-suite
+        conda install labscript-suite pyqt
+        conda install pip 
+        pip install -r requirements-dev.txt
+    - name: Set up labscript
+      shell: bash -el {0}
+      run: |
+        conda activate labscript-qc-x86
+        labscript-profile-create
+        cd labscript_files
+        mkdir ~/labscript-suite/userlib/labscriptlib/mot
+        cp header.py ~/labscript-suite/userlib/labscriptlib/mot/header.py
+        mkdir -p ~/labscript_shared/Experiments/mot
+        cp connection_table.h5 ~/labscript_shared/Experiments/mot/connection_table.h5
+        cp test_globals.h5 ~/labscript_shared/Experiments/mot/test_globals.h5
+        mkdir -p ~/labscript-suite/app_saved_configs/mot/runmanager
+        cp runmanager.ini ~/labscript-suite/app_saved_configs/mot/runmanager/runmanager.ini
+        ini_config=$(find ~/labscript-suite/labconfig/Mac*.ini)
+        cp default-config.ini $ini_config
+        cp zpsecret-3d71b6cc.key ~/labscript-suite/labconfig/zpsecret-3d71b6cc.key
+        
+    - name: Start runmanager and blacs in the background and start tests
+      shell: bash -el {0}
+      run: |
+        conda activate labscript-qc-x86
+        blacs &
+        runmanager &
+        pytest mot
