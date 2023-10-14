@@ -761,12 +761,13 @@ class LocalProvider(StorageProvider):
     Create a file storage that works on the local machine.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, base_path: str = None) -> None:
         """
         Set up the neccessary keys and create the client through which all the connections will run.
         """
-        base_path = config("BASE_PATH")
-        self.base_path = base_path
+        if base_path is None:
+            base_path = config("BASE_PATH")
+        self.base_path = base_path.rstrip("/")
 
     def upload(self, content_dict: Mapping, storage_path: str, job_id: str) -> None:
         """
@@ -949,7 +950,13 @@ class LocalProvider(StorageProvider):
         """
         # get a list of files in the folder
         full_path = self.base_path + "/" + storage_path
-        return os.listdir(full_path)
+
+        # check if the folder exists.
+        # we are not creating it if it does not exist
+        if os.path.exists(full_path):
+            return os.listdir(full_path)
+        # if the folder does not exist, return an empty list
+        return []
 
     def get_next_job_in_queue(self, backend_name: str) -> dict:
         """
