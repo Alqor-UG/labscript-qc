@@ -22,6 +22,8 @@ DigitalOut(
 # create a FunctionRunner child of the DummyIntermediateDevice
 FunctionRunner(name="function_runner")
 
+# csv_file_path = "/Users/fredjendrzejewski/output_test.csv"
+# csv_file_path = "C:/Users/BASOARO/Documents/output_test.csv"
 
 def func(shot_context, t):
     """
@@ -33,8 +35,9 @@ def func(shot_context, t):
     print("Here I am")
     print("I added the cool function from the function runner.")
     # we have to write it at the right position
-    csv_file_path = "/Users/fredjendrzejewski/output_test.csv"
-
+    
+    csv_file_path = "C:/Users/BASOARO/Documents/output_test.csv"
+    
     # Open the CSV file in write mode
     with open(csv_file_path, mode="w", newline="") as csv_file:
         # Create a CSV writer object

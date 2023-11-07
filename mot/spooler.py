@@ -25,7 +25,8 @@ JSON_STATUS_FOLDER = f"{REMOTE_BASE_PATH}/status"
 
 
 # in the labscript ini file this is equivalent to the the path `labscriptlib`
-EXP_SCRIPT_FOLDER = "/Users/fredjendrzejewski/labscript-suite/userlib/labscriptlib/mot"
+# EXP_SCRIPT_FOLDER = "/Users/fredjendrzejewski/labscript-suite/userlib/labscriptlib/mot"
+EXP_SCRIPT_FOLDER = "C:/Users/BASOARO/labscript-suite/userlib/labscriptlib/mot"
 # local files
 HEADER_PATH = f"{EXP_SCRIPT_FOLDER}/header.py"
 

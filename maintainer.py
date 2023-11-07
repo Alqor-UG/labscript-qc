@@ -1,10 +1,10 @@
 import time
 
-# from utils.storage_providers import MongodbProvider
-from utils.storage_providers import LocalProvider
+from utils.storage_providers import MongodbProvider
+# from utils.storage_providers import LocalProvider
 
-# storage_provider = MongodbProvider()
-storage_provider = LocalProvider()
+storage_provider = MongodbProvider()
+# storage_provider = LocalProvider()
 
 from mot.config import spooler_object as mot_spooler
 
