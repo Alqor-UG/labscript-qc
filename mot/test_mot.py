@@ -237,7 +237,7 @@ def test_spooler_config() -> None:
     Test that the back-end is properly configured and we can indeed provide those parameters
      as we would like.
     """
-    fermion_config_dict = {
+    config_dict = {
         "description": ("Setup of an atomic mot."),
         "version": "0.1",
         "cold_atom_type": "spin",
@@ -253,9 +253,10 @@ def test_spooler_config() -> None:
         "num_wires": 1,
         "wire_order": "interleaved",
         "num_species": 1,
+        "operational": True,
     }
     spooler_config_dict = spooler.get_configuration()
-    assert spooler_config_dict == fermion_config_dict
+    assert spooler_config_dict == config_dict
 
 
 def test_add_job() -> None:
