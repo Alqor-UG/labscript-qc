@@ -1,17 +1,19 @@
+"""
+This is the main file for the spooler. It will run continuously and process jobs.
+Normally, there is no need to change this file. The only thing that needs to be changed is the `settings.py` file.
+"""
+
 import time
 
-# from utils.storage_providers import MongodbProvider
-from utils.storage_providers import LocalProvider
+from settings import backends, storage_type
+from utils.storage_providers import MongodbProvider, DropboxProvider, LocalProvider
 
-# storage_provider = MongodbProvider()
-storage_provider = LocalProvider()
-
-from mot.config import spooler_object as mot_spooler
-
-# configure the backends
-backends = {
-    "mot": mot_spooler,
-}
+if storage_type == "local":
+    storage_provider = LocalProvider()
+elif storage_type == "mongodb":
+    storage_provider = MongodbProvider()
+elif storage_type == "dropbox":
+    storage_provider = DropboxProvider()
 
 
 def update_backends() -> None:
@@ -40,7 +42,7 @@ def main() -> None:
 
     while True:
         time.sleep(3)
-        print("Run again")
+        print("Processing jobs...")
         requested_backend = backends_list[0]
         backends_list.append(backends_list.pop(0))
         # I should most certainly make this fairly close to the logic in the `sqooler`
