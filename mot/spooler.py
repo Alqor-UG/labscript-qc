@@ -3,7 +3,7 @@ This is the file that creates the labscript file and sends it to the BLACS.
 """
 import os
 from time import sleep
-
+from decouple import config
 import numpy as np
 
 import runmanager.remote
@@ -25,7 +25,9 @@ JSON_STATUS_FOLDER = f"{REMOTE_BASE_PATH}/status"
 
 
 # in the labscript ini file this is equivalent to the the path `labscriptlib`
-EXP_SCRIPT_FOLDER = "/Users/fredjendrzejewski/labscript-suite/userlib/labscriptlib/mot"
+
+EXP_SCRIPT_FOLDER = config("EXP_SCRIPT_FOLDER")
+
 # local files
 HEADER_PATH = f"{EXP_SCRIPT_FOLDER}/header.py"
 
