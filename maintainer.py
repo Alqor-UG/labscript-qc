@@ -1,6 +1,7 @@
 """
 This is the main file for the spooler. It will run continuously and process jobs.
-Normally, there is no need to change this file. The only thing that needs to be changed is the `settings.py` file.
+Normally, there is no need to change this file. The only thing that needs to be changed 
+is the `settings.py` file.
 """
 
 import time
