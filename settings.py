@@ -7,6 +7,7 @@ from mot.config import spooler_object as mot_spooler
 
 # valid storage types are: "local", "mongodb" and "dropbox"
 storage_type = "mongodb"
+# storage_type = "local"
 
 # configure the backends
 backends = {
