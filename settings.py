@@ -3,12 +3,21 @@ In this file, we will define all the settings for the maintainer. Any instance o
 to suit their needs. The maintainer will be responsible for updating the backends on the storage provider.
 """
 
-from mot.config import spooler_object as mot_spooler
+import sys
+from decouple import config
+
+# Get the value of the EXP_SCRIPT_FOLDER variable
+exp_script_folder = config("LAB_SCRIPT_FOLDER")
+print(exp_script_folder)
+# Add EXP_SCRIPT_FOLDER to the system path
+sys.path.append(exp_script_folder)
+
+from mot import config
 
 # valid storage types are: "local", "mongodb" and "dropbox"
 storage_type = "local"
 
 # configure the backends
 backends = {
-    "mot": mot_spooler,
+    "mot": config.spooler_object,
 }
