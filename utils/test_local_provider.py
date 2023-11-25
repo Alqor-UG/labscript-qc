@@ -132,8 +132,8 @@ class TestLocalProvider:
         queue_path = "jobs/queued/" + backend_name
 
         # test what happens for the empty case
-        next_job = storage_provider.get_file_queue(queue_path)
-
+        empty_job = storage_provider.get_file_queue(queue_path)
+        assert empty_job == []
         # first we have to upload a dummy job
         job_id = (uuid.uuid4().hex)[:24]
         job_dict = {"job_id": job_id, "job_json_path": "None"}
