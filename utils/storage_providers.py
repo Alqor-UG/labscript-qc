@@ -12,7 +12,7 @@ import shutil
 import os
 
 # necessary for the dropbox provider
-from typing import Mapping
+from typing import Mapping, Optional
 import dropbox
 from dropbox.files import WriteMode
 from dropbox.exceptions import ApiError, AuthError
@@ -761,7 +761,7 @@ class LocalProvider(StorageProvider):
     Create a file storage that works on the local machine.
     """
 
-    def __init__(self, base_path: str = None) -> None:
+    def __init__(self, base_path: Optional[str] = None) -> None:
         """
         Set up the neccessary keys and create the client through which all the connections will run.
         """

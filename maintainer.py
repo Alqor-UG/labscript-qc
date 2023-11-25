@@ -7,7 +7,14 @@ is the `settings.py` file.
 import time
 
 from settings import backends, storage_type
-from utils.storage_providers import MongodbProvider, DropboxProvider, LocalProvider
+from utils.storage_providers import (
+    MongodbProvider,
+    DropboxProvider,
+    LocalProvider,
+    StorageProvider,
+)
+
+storage_provider: StorageProvider
 
 if storage_type == "local":
     storage_provider = LocalProvider()
