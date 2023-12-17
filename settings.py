@@ -12,12 +12,16 @@ print(exp_script_folder)
 # Add EXP_SCRIPT_FOLDER to the system path
 sys.path.append(exp_script_folder)
 
+
+# import the config file from the experiment. The package is the name of the experiment
 from mot import config
 
+# choose where the remote jobs are stored
 # valid storage types are: "local", "mongodb" and "dropbox"
-storage_type = "local"
+storage_type = "mongodb"
 
-# configure the backends
+# configure the backends that are accessible to the maintainer
+# typicall this is the spooler object from the experiment and only one backend is needed here.
 backends = {
     "mot": config.spooler_object,
 }
