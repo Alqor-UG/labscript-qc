@@ -9,3 +9,4 @@ jsonschema==4.19.0
 pytest==7.4.1
 dropbox==11.36.2
 pymongo==4.5.0
+mike==1.1.2
