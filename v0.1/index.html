@@ -10,11 +10,9 @@
       
       
       
-        <link rel="next" href="user_guide/">
-      
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.5">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.2.5">
     
     
       
@@ -63,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-labscript-qc" class="md-skip">
+        <a href="#welcome-to-sqooler" class="md-skip">
           Skip to content
         </a>
       
@@ -71,6 +69,10 @@
     <div data-md-component="announce">
       
     </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
     
     
       
@@ -258,15 +260,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-to-read-the-information" class="md-nav__link">
-    How to read the information
+  <a href="#integrating-with-labscript" class="md-nav__link">
+    Integrating with labscript
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#our-projects" class="md-nav__link">
-    Our projects
+  <a href="#our-other-projects" class="md-nav__link">
+    Our other projects
   </a>
   
 </li>
@@ -282,25 +284,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="user_guide/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    User Guide
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -332,15 +315,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-to-read-the-information" class="md-nav__link">
-    How to read the information
+  <a href="#integrating-with-labscript" class="md-nav__link">
+    Integrating with labscript
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#our-projects" class="md-nav__link">
-    Our projects
+  <a href="#our-other-projects" class="md-nav__link">
+    Our other projects
   </a>
   
 </li>
@@ -370,21 +353,66 @@
   
 
 
-<h1 id="welcome-to-labscript-qc">Welcome to labscript-qc</h1>
-<p><em>labscript-qc</em> is a small library to connect labscript to <code>qlued</code>.</p>
-<h2 id="how-to-read-the-information">How to read the information</h2>
+<h1 id="welcome-to-sqooler">Welcome to Sqooler</h1>
+<p>This is a library that cloud access of cold atom experiments that are running with <a href="https://docs.labscriptsuite.org/en/latest/">labscript</a>through the <code>qiskit-cold-atom</code> and the <code>qlued</code> interface:</p>
 <ul>
-<li><a href="guides/user_guide.md">User Guide</a> : For users who want to use the service.</li>
+<li><code>qiskit-cold-atom</code> allows the enduser to write the circuit definitions on its laptop and send them to the server in form of a nice <em>json</em> file.</li>
+<li><code>qlued</code> handles the user management and stores the received <em>json</em> file in an appropiate queue.</li>
+<li><code>labscript-qc</code> acts as the backend that performs the calculations from the queue and sends back the result into the storage.</li>
 </ul>
-<h2 id="our-projects">Our projects</h2>
+<p>To enable this work-flow, the labscript sequences have to written according to  a few rules on how to parse the json files etc. This is what we have started to standardize and simplify as much as possible. In the following we documented each module its purpose and look forward to your contributions.</p>
+<h2 id="integrating-with-labscript">Integrating with labscript</h2>
 <ul>
-<li><a href="https://github.com/alqor-ug/qlued"><code>qlued</code></a> - API code (this project).</li>
+<li>Make sure that you have running installation of <a href="https://github.com/labscript-suite">labscript suite</a>.</li>
+<li>To install <code>labscript-qc</code> please clone the repository into the <code>userlib/pythonlib</code> folder of your labscript suite installation. </li>
+<li>Install the <code>labscript-qc-example</code> into your labscriptlib. We typically give it the name <code>mot</code> for explantory purposes.</li>
+</ul>
+<p>It is now time to configure the <code>labscript-qc</code> package. Some of the settings can be currently found in the <code>.env</code> file, some in the <code>settings.py</code> file and some in the <code>config.py</code> of the template itself. A more consistent configuration will be implemented in the future.</p>
+<ul>
+<li>Copy the <code>.env.example</code> file to <code>.env</code> and edit it to your needs.</li>
+<li>Update the <code>settings.py</code> file to your needs. We have tried to highlight the most important lines.</li>
+</ul>
+<p>Most likely you will stumble across the question of the fitting storage. We need to enable the storage of the settings, which we manage with <a href="https://pypi.org/project/python-decouple/">python-decouple</a>. To do so, create a <code>.env</code> file in the root directory. 
+<div class="highlight"><pre><span></span><code>project
+│   README.md
+│   maintainer.py
+|   .env
+|   ...    
+│
+└───.github
+│   │   ...
+|
+└───utils
+│   │   ...
+|
+│   ...
+</code></pre></div></p>
+<p>An example content of this file would be:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># setting for MongoDB</span>
+<span class="n">MONGODB_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">USERNAME</span><span class="o">&gt;</span>
+<span class="n">MONGODB_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">PASSWORD</span><span class="o">&gt;</span>
+<span class="n">MONGODB_DATABASE_URL</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">URL</span><span class="o">&gt;</span>
+
+<span class="c1"># settings for the Dropbox, if you use it as a storage</span>
+<span class="n">APP_KEY</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">APP</span><span class="o">-</span><span class="n">KEY</span><span class="o">&gt;</span>
+<span class="n">APP_SECRET</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">APP</span><span class="o">-</span><span class="n">SECRED</span><span class="o">&gt;</span>
+<span class="n">REFRESH_TOKEN</span><span class="o">=&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">REFRESH</span><span class="o">-</span><span class="n">TOKEN</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>Then, to configure the storage make sure which one you use as we provide different options. For example, if you use the MongoDB storage you have to set the <code>MONGODB_USERNAME</code>, <code>MONGODB_PASSWORD</code> and <code>MONGODB_DATABASE_URL</code>.</p>
+<p>If you use the Dropbox storage, add the <code>APP_KEY</code>, <code>APP_SECRET</code> and <code>REFRESH_TOKEN</code> to the <code>.env</code> file.</p>
+<p>To run the system you should run the <code>maintainer</code> with <code>python maintainer.py</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This step also uploads the configuration of the backends onto the storage. So it is crucial for any kind of tests that involve <code>qlued</code>.</p>
+</div>
+<h2 id="our-other-projects">Our other projects</h2>
+<ul>
+<li><a href="https://github.com/alqor-ug/qlued"><code>qlued</code></a> - API code that manages users etc for this project.</li>
 <li><a href="https://github.com/alqor-ug/sqooler"><code>sqooler</code></a> - Simulator backends.</li>
 </ul>
 <h2 id="related-projects">Related projects</h2>
 <ul>
-<li><a href="https://github.com/Qiskit-Extensions/qiskit-cold-atom"><code>qiskit-cold-atom</code></a> - QisKit examples.</li>
-<li>depreceated expamples at <a href="https://github.com/synqs/pennylane-ls"><code>pennylane-ls</code></a> - Pennylane examples by synqs.</li>
+<li><a href="https://github.com/qiskit-community/qiskit-cold-atom"><code>qiskit-cold-atom</code></a> - QisKit examples</li>
 </ul>
 
 
@@ -402,28 +430,6 @@
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-        
-          
-          <a href="user_guide/" class="md-footer__link md-footer__link--next" aria-label="Next: User Guide" rel="next">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                User Guide
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
@@ -447,7 +453,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.footer", "toc.follow"], "search": "assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.footer", "toc.follow"], "search": "assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="assets/javascripts/bundle.78eede0e.min.js"></script>
