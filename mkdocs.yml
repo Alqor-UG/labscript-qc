@@ -10,8 +10,11 @@ theme:
 
 nav:
   - Home: index.md
-  - "User Guide": user_guide.md
-  
+
+extra:
+  version:
+    provider: mike
+
 repo_url: https://github.com/fretchen/labscript-qc
 edit_uri: edit/main/docs/
 

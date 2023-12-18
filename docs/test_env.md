@@ -1,5 +1,9 @@
 # Test up a test env
 
+
+!!! note
+        This is a temporary solution to test the `labscript-qc` package. It will be replaced by a proper test environment in the future.
+
 How can we set up a test environment for the project?
 
 1. Create a new virtual environment
