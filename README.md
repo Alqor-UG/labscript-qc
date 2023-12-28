@@ -1,9 +1,12 @@
 # labscript-qc
-A collection of spooler code to make quantum circuits accessible for labscript.
+
+This repo was an initial attempt to make quantum circuits accessible for labscript.
 
 We are proud to be currently sponsored by the *Unitary Fund*. It enables us to set up a good test environment and make it as straight-forward as possible to integrate cold atoms with circuits. This documentation will improve as the good goes beyond the initial piloting status. 
 
 [![Unitary Fund](https://img.shields.io/badge/Supported%20By-UNITARY%20FUND-brightgreen.svg?style=for-the-badge)](https://unitary.fund) 
+
+We were able to merge the code into the [sqooler](https://github.com/Alqor-UG/sqooler/tree/main) such that it allows experimentalists and theorists a common remote SDK.
 
 ## Installation
 
